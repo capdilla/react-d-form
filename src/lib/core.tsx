@@ -25,6 +25,11 @@ interface IState {
   oldState: IfieldState;
 }
 
+/**
+ *  TODO Send only the required props
+ * @param FormComponentes
+ * @param props
+ */
 export const GetComponent = (FormComponentes: any, props: any) => {
   if (props.component == null) {
     const Elm = FormComponentes[props.field.type];
@@ -38,8 +43,8 @@ export const GetComponent = (FormComponentes: any, props: any) => {
           onChange={(val: any) => props.onFieldsChange(props.field, val, false)}
           onBlur={(val: any) => props.onFieldsChange(props.field, val, true)}
           executeChangeOnBlur
-          {...props.field}
           {...props}
+          {...props.field}
         />
       );
     }
@@ -47,8 +52,8 @@ export const GetComponent = (FormComponentes: any, props: any) => {
     return (
       <Elm
         onChange={(val: any) => props.onFieldsChange(props.field, val, true)}
-        {...props.field}
         {...props}
+        {...props.field}
       />
     );
   } else {
@@ -72,13 +77,13 @@ export default class Core extends PureComponent<Props, IState> {
     super(props);
     this.state = {
       fieldsState: {
-        ISFORMVALID: true
+        ISFORMVALID: true,
       },
       validation: {},
       usedFields: [],
       oldState: {
-        ISFORMVALID: true
-      }
+        ISFORMVALID: true,
+      },
     };
 
     this.onFieldsChange = this.onFieldsChange.bind(this);
@@ -97,6 +102,8 @@ export default class Core extends PureComponent<Props, IState> {
     ) {
       this.generateValues();
     }
+
+    return null;
   }
 
   componentDidMount() {
@@ -153,8 +160,8 @@ export default class Core extends PureComponent<Props, IState> {
             acc.validations = {
               ...acc.validations,
               [currField.name]: {
-                ...validation
-              }
+                ...validation,
+              },
             };
 
             acc.state = { ...acc.state, [currField.name]: val };
@@ -173,13 +180,13 @@ export default class Core extends PureComponent<Props, IState> {
 
     const newFieldsState = {
       ...newState.state,
-      ISFORMVALID
+      ISFORMVALID,
     };
 
     const state = {
       validation: newState.validations,
       fieldsState: newFieldsState,
-      oldState: fieldsState
+      oldState: fieldsState,
     };
 
     if (JSON.stringify(state.oldState) != JSON.stringify(state.fieldsState)) {
@@ -238,7 +245,7 @@ export default class Core extends PureComponent<Props, IState> {
     if (field.validation?.custom) {
       const result = field.validation.custom({
         ...fieldsState,
-        [field.name]: val
+        [field.name]: val,
       });
 
       if (typeof result == "object") {
@@ -255,7 +262,7 @@ export default class Core extends PureComponent<Props, IState> {
     return {
       ...validation[field.name],
       isValid,
-      errorMessage: errorMessage ? errorMessage : "This field is required"
+      errorMessage: errorMessage ? errorMessage : "This field is required",
     };
   }
 
@@ -268,7 +275,7 @@ export default class Core extends PureComponent<Props, IState> {
 
     const newValidation = {
       ...validation,
-      [field.name]: validationField
+      [field.name]: validationField,
     };
 
     const ISFORMVALID = this.getISFORMVALID(newValidation);
@@ -282,13 +289,13 @@ export default class Core extends PureComponent<Props, IState> {
     let newState = {
       ...fieldsState,
       [field.name]: val === "" ? null : val,
-      ISFORMVALID
+      ISFORMVALID,
     };
 
     this.setState({
       fieldsState: newState,
       validation: newValidation,
-      usedFields: newUsedFields
+      usedFields: newUsedFields,
     });
 
     if (doOnChange && this.props.onFormChange) {
@@ -354,7 +361,7 @@ export default class Core extends PureComponent<Props, IState> {
           executeChangeOnBlur: executeChangeOnBlur,
           defaultState: defaultState,
           usedFields: usedFields,
-          field: typeField
+          field: typeField,
         },
         key2
       )
@@ -372,5 +379,5 @@ Core.defaultProps = {
   executeChangeOnBlur: true,
   defaultState: {},
   parseState: () => {},
-  showValidation: false
+  showValidation: false,
 };
