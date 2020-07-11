@@ -72,6 +72,7 @@ export interface IFormComponent {
   iconSize?: number;
   iconColor?: string;
   error?: { content: string };
+  validationForm: any;
 }
 
 interface FormClass extends react.ComponentClass<Props> {}

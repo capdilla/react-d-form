@@ -51,7 +51,7 @@ export const withError = <P extends {}>(Comp: React.ComponentType<P>) => {
       props.name,
       props.showValidation == true,
       props.usedFields,
-      props.validation
+      props.validationForm
     ) as { content: string } | undefined;
 
     return <Comp {...props} error={error} />;

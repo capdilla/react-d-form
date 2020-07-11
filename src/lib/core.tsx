@@ -1,5 +1,5 @@
-import React, { Component, PureComponent } from "react";
-import { Props, Tfield, TdefaultState } from "../types";
+import React, { PureComponent } from "react";
+import { Props, Tfield, IFormComponent } from "../types";
 import regex from "./regex";
 
 import { get as get_ } from "lodash";
@@ -20,7 +20,7 @@ interface IfieldState {
 
 interface IState {
   fieldsState: IfieldState;
-  validation: IValidation;
+  validationForm: IValidation;
   usedFields: string[];
   oldState: IfieldState;
 }
@@ -79,7 +79,7 @@ export default class Core extends PureComponent<Props, IState> {
       fieldsState: {
         ISFORMVALID: true,
       },
-      validation: {},
+      validationForm: {},
       usedFields: [],
       oldState: {
         ISFORMVALID: true,
@@ -113,20 +113,15 @@ export default class Core extends PureComponent<Props, IState> {
   generateValues(nextProps?: Props) {
     // let defaultState: TdefaultState, parseState, fields;
 
-    const { defaultState, parseState, fields } = this.props;
+    const { defaultState, fields } = this.props;
 
-    const { fieldsState, usedFields } = this.state;
+    const { fieldsState } = this.state;
 
     const defaultStateIsNotEmpty: boolean =
       Object.keys(defaultState ? defaultState : {}).length > 0;
 
     const newState = fields.reduce(
       (acc, { fields }) => {
-        //   const fFields =
-        //     typeof fields.fields == "function"
-        //       ? fields.fields(fieldsState)
-        //       : fields.fields;
-
         const fFields = typeof fields == "function" ? fields({}) : fields;
 
         fFields.reduce(
@@ -184,7 +179,7 @@ export default class Core extends PureComponent<Props, IState> {
     };
 
     const state = {
-      validation: newState.validations,
+      validationForm: newState.validations,
       fieldsState: newFieldsState,
       oldState: fieldsState,
     };
@@ -204,7 +199,7 @@ export default class Core extends PureComponent<Props, IState> {
     );
   }
 
-  private parseValue<T>(field: Tfield, val: T): T {
+  private parseValue<T>(field: Tfield, val: any): T {
     //parse val tu number
     if (
       field.props &&
@@ -218,8 +213,8 @@ export default class Core extends PureComponent<Props, IState> {
     return val;
   }
 
-  private validateField<T>(field: Tfield, val: T): Tvalidation {
-    const { fieldsState, validation, usedFields } = this.state;
+  private validateField<T>(field: Tfield, val: any): Tvalidation {
+    const { fieldsState, validationForm } = this.state;
 
     let ISFORMVALID: boolean = true;
     let isValid: boolean = true;
@@ -260,21 +255,21 @@ export default class Core extends PureComponent<Props, IState> {
     }
 
     return {
-      ...validation[field.name],
+      ...validationForm[field.name],
       isValid,
       errorMessage: errorMessage ? errorMessage : "This field is required",
     };
   }
 
   onFieldsChange(field: Tfield, val: any, doOnChange: boolean) {
-    const { validation, usedFields, fieldsState } = this.state;
+    const { validationForm, usedFields, fieldsState } = this.state;
 
     const value = this.parseValue(field, val);
 
     const validationField = this.validateField(field, value);
 
     const newValidation = {
-      ...validation,
+      ...validationForm,
       [field.name]: validationField,
     };
 
@@ -294,7 +289,7 @@ export default class Core extends PureComponent<Props, IState> {
 
     this.setState({
       fieldsState: newState,
-      validation: newValidation,
+      validationForm: newValidation,
       usedFields: newUsedFields,
     });
 
@@ -346,21 +341,20 @@ export default class Core extends PureComponent<Props, IState> {
   fieldFn(rows: { rowFields: Tfield[] }, cb: Function) {
     const { showValidation, executeChangeOnBlur, defaultState } = this.props;
 
-    const { validation, fieldsState, usedFields } = this.state;
+    const { validationForm, fieldsState, usedFields } = this.state;
 
     return rows.rowFields.map((typeField, key2) =>
       cb(
         {
           data: this.getDataDependsOn(typeField),
-
           value: this.getValue(typeField),
-          fieldsState: fieldsState,
+          fieldsState,
           onFieldsChange: this.onFieldsChange,
-          validation: validation,
-          showValidation: showValidation,
-          executeChangeOnBlur: executeChangeOnBlur,
-          defaultState: defaultState,
-          usedFields: usedFields,
+          validationForm,
+          showValidation,
+          executeChangeOnBlur,
+          defaultState,
+          usedFields,
           field: typeField,
         },
         key2
