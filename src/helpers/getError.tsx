@@ -45,8 +45,10 @@ const getError = (
   return showValidation && valid == "error" ? { content: errorMessage } : false;
 };
 
-export const withError = <P extends {}>(Comp: React.ComponentType<P>) => {
-  return (props: IFormComponent): any => {
+export const withError = <P extends IFormComponent>(
+  Comp: React.ComponentType<P>
+) => {
+  return (props: P): any => {
     const error = getError(
       props.name,
       props.showValidation == true,

@@ -1,6 +1,5 @@
 import React from "react";
-import { action } from "@storybook/addon-actions";
-import { Button } from "@storybook/react/demo";
+import { IFields } from "../src/types";
 
 import DForm from "../src/react-web";
 
@@ -71,6 +70,27 @@ export const WithRegexEmail = () => (
     ]}
   />
 );
+
+interface FormType {
+  name: string;
+}
+
+const fields: IFields<FormType>[] = [
+  {
+    fields: [
+      {
+        name: "name",
+        type: "Input",
+        validation: {
+          regexType: "email",
+          errorMessage: "No es un mail",
+        },
+      },
+    ],
+  },
+];
+
+export const WithTypescript = () => <DForm fields={fields} />;
 
 export const WithCustomValidation = () => (
   <DForm

@@ -12,18 +12,14 @@ const Components = {
       name,
       label,
       onChange,
-      colSize,
+
       onBlur,
-      iconName,
-      iconSize,
-      iconColor,
+
       props,
       value,
       placeholder,
       error,
     }: Iinput) => {
-      const width = colSize ? `${colSize}%` : `100%`;
-
       return (
         <>
           <label>{label}</label>

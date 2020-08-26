@@ -1,5 +1,7 @@
+//@ts-nocheck
+
 import React, { PureComponent } from "react";
-import { Props, Tfield, IFormComponent } from "../types";
+import { Props, Ifield, IFormComponent } from "../types";
 import regex from "./regex";
 
 import { get as get_ } from "lodash";
@@ -199,7 +201,7 @@ export default class Core extends PureComponent<Props, IState> {
     );
   }
 
-  private parseValue<T>(field: Tfield, val: any): T {
+  private parseValue<T>(field: Ifield<any>, val: any): number | T {
     //parse val tu number
     if (
       field.props &&
@@ -207,13 +209,13 @@ export default class Core extends PureComponent<Props, IState> {
       field.props.type == "number" &&
       !val
     ) {
-      return parseFloat(val);
+      return +val;
     }
 
     return val;
   }
 
-  private validateField<T>(field: Tfield, val: any): Tvalidation {
+  private validateField(field: Ifield<any>, val: any): Tvalidation {
     const { fieldsState, validationForm } = this.state;
 
     let ISFORMVALID: boolean = true;
@@ -261,7 +263,7 @@ export default class Core extends PureComponent<Props, IState> {
     };
   }
 
-  onFieldsChange(field: Tfield, val: any, doOnChange: boolean) {
+  onFieldsChange(field: Ifield<any>, val: any, doOnChange: boolean) {
     const { validationForm, usedFields, fieldsState } = this.state;
 
     const value = this.parseValue(field, val);
@@ -298,14 +300,14 @@ export default class Core extends PureComponent<Props, IState> {
     }
   }
 
-  getDataDependsOn(field: Tfield) {
+  getDataDependsOn(field: Ifield<any>) {
     if (field.dataDependsOn) {
       const data = get_(this.state.fieldsState, field.dataDependsOn);
       return data ? data : [];
     }
   }
 
-  getValue(field: Tfield) {
+  getValue(field: Ifield<any>) {
     const { fieldsState, oldState } = this.state;
 
     if (field.dataDependsOn) {
@@ -338,7 +340,7 @@ export default class Core extends PureComponent<Props, IState> {
     });
   }
 
-  fieldFn(rows: { rowFields: Tfield[] }, cb: Function) {
+  fieldFn(rows: { rowFields: Ifield<any>[] }, cb: Function) {
     const { showValidation, executeChangeOnBlur, defaultState } = this.props;
 
     const { validationForm, fieldsState, usedFields } = this.state;

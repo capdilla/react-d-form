@@ -1,7 +1,7 @@
-import react, { Component } from "react";
+import React from "react";
 
-export type Tfield = {
-  name: string;
+export interface Ifield<T> {
+  name: keyof T | string;
   label?: string;
   placeholder?: string;
   type:
@@ -25,7 +25,7 @@ export type Tfield = {
   component?: Function;
   validation?: IValidation;
   [key: string]: any;
-};
+}
 
 export type TCustomResult = {
   valid: boolean;
@@ -39,9 +39,9 @@ export interface IValidation {
   custom?: (values: any) => boolean | TCustomResult;
 }
 
-export interface IFields {
+export interface IFields<T> {
   div?: string;
-  fields: ((values: any) => Tfield[]) | Tfield[];
+  fields: ((values: T) => Ifield<T>[]) | Ifield<T>[];
 }
 
 export type TdefaultState = {
@@ -49,7 +49,7 @@ export type TdefaultState = {
 };
 
 export interface Props {
-  fields: IFields[];
+  fields: IFields<any>[];
   onFormChange?: Function;
   showValidation?: boolean;
   defaultState?: TdefaultState;
@@ -75,7 +75,7 @@ export interface IFormComponent {
   validationForm: any;
 }
 
-interface FormClass extends react.ComponentClass<Props> {}
+interface FormClass extends React.ComponentClass<Props> {}
 
 declare const Form: FormClass;
 
