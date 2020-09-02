@@ -257,7 +257,7 @@ export default class Core extends PureComponent<Props, IState> {
     return {
       ...validationForm[field.name],
       isValid,
-      errorMessage: errorMessage ? errorMessage : "This field is required",
+      errorMessage: errorMessage ? errorMessage : "FIELD_REQUIRED",
     };
   }
 
