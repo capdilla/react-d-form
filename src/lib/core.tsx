@@ -110,7 +110,7 @@ export default class Core extends PureComponent<Props, IState> {
     this.generateValues();
   }
 
-  generateValues(nextProps?: Props) {
+  generateValues(_?: Props) {
     // let defaultState: TdefaultState, parseState, fields;
 
     const { defaultState, fields } = this.props;
@@ -201,7 +201,7 @@ export default class Core extends PureComponent<Props, IState> {
 
   private getISFORMVALID(validations: IValidation): boolean {
     return !Object.entries(validations).some(
-      ([name, xValidation]) => !xValidation.isValid
+      ([_, xValidation]) => !xValidation.isValid
     );
   }
 
@@ -229,13 +229,11 @@ export default class Core extends PureComponent<Props, IState> {
 
     const { fieldsState, validationForm } = this.state;
 
-    let ISFORMVALID: boolean = true;
     let isValid: boolean = true;
     let errorMessage = field.validation?.errorMessage;
 
     //check if is required
     if (field.validation?.required && !val) {
-      ISFORMVALID = false;
       isValid = false;
     }
 
@@ -244,7 +242,6 @@ export default class Core extends PureComponent<Props, IState> {
       const result = val && val.match(regex[field.validation?.regexType]);
 
       if (!result) {
-        ISFORMVALID = false;
         isValid = false;
       }
     }
@@ -263,14 +260,13 @@ export default class Core extends PureComponent<Props, IState> {
 
       if (typeof result == "boolean" && !result) {
         isValid = false;
-        ISFORMVALID = false;
       }
     }
 
     return {
       ...validationForm[field.name],
       isValid,
-      errorMessage: errorMessage ? errorMessage : "This field is required"
+      errorMessage: errorMessage ? errorMessage : "FIELD_REQUIRED"
     };
   }
 
