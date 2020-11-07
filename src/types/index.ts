@@ -23,7 +23,7 @@ export interface Ifield<T> {
   //colSize: 'two' | 'four' | 'six' | 'eight' | 'ten' | 'twelve' | 'fourteen' | 'sixteen',
   colSize?: number;
   component?: Function;
-  validation?: IValidation;
+  validation?: IValidation<T>;
   [key: string]: any;
 }
 
@@ -32,11 +32,11 @@ export type TCustomResult = {
   errorMessage: string;
 };
 
-export interface IValidation {
+export interface IValidation<T> {
   required?: boolean;
   regexType?: "email" | "phone";
   errorMessage?: string;
-  custom?: (values: any) => boolean | TCustomResult;
+  custom?: (values: T) => boolean | TCustomResult;
 }
 
 export interface IFields<T> {
@@ -48,11 +48,15 @@ export type TdefaultState = {
   [key: string]: any;
 };
 
-export interface Props {
-  fields: IFields<any>[];
-  onFormChange?: Function;
+export interface IFormData<T> {
+  data: T;
+  validation: { ISFORMVALID: boolean };
+}
+export interface Props<T> {
+  fields: IFields<T>[];
+  onFormChange?: (formData: IFormData<T>) => void;
   showValidation?: boolean;
-  defaultState?: TdefaultState;
+  defaultState?: T;
   parseState?: Function;
   executeChangeOnBlur?: boolean;
 }
@@ -75,7 +79,7 @@ export interface IFormComponent {
   validationForm: any;
 }
 
-interface FormClass extends React.ComponentClass<Props> {}
+interface FormClass extends React.ComponentClass<Props<any>> {}
 
 declare const Form: FormClass;
 

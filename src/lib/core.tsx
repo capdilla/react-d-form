@@ -3,6 +3,7 @@ import { Props, Ifield } from "../types";
 import regex from "./regex";
 
 import { get as get_ } from "lodash";
+import { hasKey } from "../helpers/hasKey";
 
 type Tvalidation = {
   isValid: boolean;
@@ -13,16 +14,20 @@ interface IValidation {
   [key: string]: Tvalidation;
 }
 
-interface IfieldState {
-  ISFORMVALID: boolean;
-  [key: string]: any;
+interface IfieldState<T> {
+  validation: IFieldsStateValidation;
+  data: T;
 }
 
-interface IState {
-  fieldsState: IfieldState;
+interface IFieldsStateValidation {
+  ISFORMVALID: boolean;
+}
+
+interface IState<T> {
+  fieldsState: IfieldState<T>;
   validationForm: IValidation;
   usedFields: string[];
-  oldState: IfieldState;
+  oldState: IfieldState<T>;
 }
 
 /**
@@ -68,21 +73,27 @@ export const GetComponent = (FormComponentes: any, props: any) => {
   }
 };
 
-export default class Core extends PureComponent<Props, IState> {
-  static defaultProps: Partial<Props>;
+export default class Core<T> extends PureComponent<Props<T>, IState<T>> {
+  static defaultProps: Partial<Props<any>>;
 
   propsHasChange: any;
 
-  constructor(props: Props) {
+  constructor(props: Props<T>) {
     super(props);
     this.state = {
       fieldsState: {
-        ISFORMVALID: true
+        data: {} as T,
+        validation: {
+          ISFORMVALID: true
+        }
       },
       validationForm: {},
       usedFields: [],
       oldState: {
-        ISFORMVALID: true
+        data: {} as T,
+        validation: {
+          ISFORMVALID: true
+        }
       }
     };
 
@@ -92,7 +103,7 @@ export default class Core extends PureComponent<Props, IState> {
     this.fieldFn = this.fieldFn.bind(this);
   }
 
-  getSnapshotBeforeUpdate(prevProps: Props) {
+  getSnapshotBeforeUpdate(prevProps: Props<any>) {
     if (
       (this.props.fields.length > 0 &&
         Object.keys(this.state.fieldsState).length == 0) ||
@@ -110,7 +121,7 @@ export default class Core extends PureComponent<Props, IState> {
     this.generateValues();
   }
 
-  generateValues(_?: Props) {
+  generateValues(_?: Props<any>) {
     // let defaultState: TdefaultState, parseState, fields;
 
     const { defaultState, fields } = this.props;
@@ -122,16 +133,20 @@ export default class Core extends PureComponent<Props, IState> {
 
     const newState = fields.reduce(
       (acc, { fields }) => {
-        const fFields = typeof fields == "function" ? fields({}) : fields;
+        const fFields =
+          typeof fields == "function" ? fields({} as any) : fields;
 
         fFields.reduce(
           (accField, currField) => {
             let val = currField.value ? currField.value : "";
 
             //if already have state
-            if (typeof currField.name == "string") {
-              if (val == "" && fieldsState[currField.name]) {
-                val = fieldsState[currField.name];
+            if (
+              typeof currField.name == "string" &&
+              hasKey(fieldsState.data, currField.name)
+            ) {
+              if (val == "" && fieldsState.data[currField.name]) {
+                val = fieldsState.data[currField.name];
               }
             }
 
@@ -139,7 +154,8 @@ export default class Core extends PureComponent<Props, IState> {
             if (
               defaultState &&
               defaultStateIsNotEmpty &&
-              typeof currField.name == "string"
+              typeof currField.name == "string" &&
+              hasKey(defaultState, currField.name)
             ) {
               //parseState
 
@@ -169,19 +185,19 @@ export default class Core extends PureComponent<Props, IState> {
 
             return accField;
           },
-          { validation: {}, state: {} }
+          { validation: {}, state: {} as T }
         );
 
         return acc;
       },
-      { validations: {}, state: {} }
+      { validations: {}, state: {} as T }
     );
 
     const ISFORMVALID = this.getISFORMVALID(newState.validations);
 
-    const newFieldsState = {
-      ...newState.state,
-      ISFORMVALID
+    const newFieldsState: IfieldState<T> = {
+      data: { ...newState.state },
+      validation: { ISFORMVALID }
     };
 
     const state = {
@@ -220,7 +236,7 @@ export default class Core extends PureComponent<Props, IState> {
   }
 
   private validateField(field: Ifield<any>, val: any): Tvalidation {
-    if (field.name !== "string") {
+    if (typeof field.name !== "string") {
       return {
         isValid: false,
         errorMessage: "FIELD_NOT_FOUND"
@@ -250,7 +266,7 @@ export default class Core extends PureComponent<Props, IState> {
     if (field.validation?.custom) {
       const result = field.validation.custom({
         ...fieldsState,
-        [field.name]: val
+        data: { [field.name]: val }
       });
 
       if (typeof result == "object") {
@@ -290,10 +306,12 @@ export default class Core extends PureComponent<Props, IState> {
       newUsedFields = [...usedFields, field.name];
     }
 
-    let newState = {
-      ...fieldsState,
-      [field.name]: val === "" ? null : val,
-      ISFORMVALID
+    let newState: IfieldState<T> = {
+      data: {
+        ...fieldsState.data,
+        [field.name]: val === "" ? null : val
+      },
+      validation: { ISFORMVALID }
     };
 
     this.setState({
@@ -323,16 +341,16 @@ export default class Core extends PureComponent<Props, IState> {
 
     if (field.dataDependsOn) {
       const fieldDepends = field.dataDependsOn.split(".")[0];
-      const current = get_(fieldsState, fieldDepends);
-      const old = get_(oldState, fieldDepends);
+      const current = get_(fieldsState.data, fieldDepends);
+      const old = get_(oldState.data, fieldDepends);
       if (JSON.stringify(current) !== JSON.stringify(old)) {
         // fieldsState[typeField.name] = null;//prevent do this, just in extrme cases;
         return null;
       } else {
-        return fieldsState[field.name];
+        return fieldsState.data[field.name];
       }
     } else {
-      return fieldsState[field.name];
+      return fieldsState.data[field.name];
     }
   }
 
@@ -344,7 +362,7 @@ export default class Core extends PureComponent<Props, IState> {
     return fields.map((field, rowKey) => {
       const rowFields =
         typeof field.fields == "function"
-          ? field.fields(fieldsState)
+          ? field.fields(fieldsState.data)
           : field.fields;
 
       return rowChild({ rowFields, rowKey });

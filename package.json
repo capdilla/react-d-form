@@ -1,6 +1,6 @@
 {
-  "name": "react-d-form",
-  "version": "2.0.0",
+  "name": "@capdilla/react-d-form",
+  "version": "2.0.2",
   "description": "React, React Native form builder",
   "main": "build/index.js",
   "scripts": {

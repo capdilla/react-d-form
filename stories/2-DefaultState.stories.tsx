@@ -12,12 +12,15 @@ export default {
 const TestForm = () => {
   const [formData, setFormData] = useState({});
 
-  console.log(formData);
+  console.log(formData, "perrin");
 
   return (
     <DForm
       defaultState={{ name: "Jonh", surname: "Doe", age: 20 }}
-      onFormChange={data => setFormData(data)}
+      onFormChange={data => {
+        console.log(data, "perro");
+        setFormData(data);
+      }}
       fields={[
         {
           fields: [

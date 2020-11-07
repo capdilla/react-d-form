@@ -4,7 +4,7 @@ import FormComponents from "./FormComponents";
 
 const Elm = (props: any) => GetComponent(FormComponents, props);
 
-export default class Form extends Core {
+export default class Form<T> extends Core<T> {
   render() {
     return (
       <div>

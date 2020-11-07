@@ -4,7 +4,7 @@ import { IFields } from "../src/types";
 import DForm from "../src/react-web";
 
 export default {
-  title: "Basic",
+  title: "Basic"
   // component: Button,
 };
 
@@ -18,17 +18,17 @@ export const Basic = () => (
             placeholder: "Name",
             type: "Input",
             props: {
-              onKeyPress: (e) => {
+              onKeyPress: e => {
                 if (e.which == 32) {
                   e.preventDefault();
                   console.log("Space Detected");
                   return false;
                 }
-              },
-            },
-          },
-        ],
-      },
+              }
+            }
+          }
+        ]
+      }
     ]}
   />
 );
@@ -43,11 +43,11 @@ export const WithValidation = () => (
             type: "Input",
             validation: {
               required: true,
-              errorMessage: "This if is empty ",
-            },
-          },
-        ],
-      },
+              errorMessage: "This if is empty "
+            }
+          }
+        ]
+      }
     ]}
   />
 );
@@ -62,11 +62,11 @@ export const WithRegexEmail = () => (
             type: "Input",
             validation: {
               regexType: "email",
-              errorMessage: "No es un mail",
-            },
-          },
-        ],
-      },
+              errorMessage: "No es un mail"
+            }
+          }
+        ]
+      }
     ]}
   />
 );
@@ -83,14 +83,16 @@ const fields: IFields<FormType>[] = [
         type: "Input",
         validation: {
           regexType: "email",
-          errorMessage: "No es un mail",
-        },
-      },
-    ],
-  },
+          errorMessage: "No es un mail"
+        }
+      }
+    ]
+  }
 ];
 
-export const WithTypescript = () => <DForm fields={fields} />;
+export const WithTypescript = () => (
+  <DForm fields={fields} onFormChange={val => console.log(val)} />
+);
 
 export const WithCustomValidation = () => (
   <DForm
@@ -106,13 +108,13 @@ export const WithCustomValidation = () => (
 
                 return {
                   valid: props.name == "hello",
-                  errorMessage: "is not hello",
+                  errorMessage: "is not hello"
                 };
-              },
-            },
-          },
-        ],
-      },
+              }
+            }
+          }
+        ]
+      }
     ]}
   />
 );
