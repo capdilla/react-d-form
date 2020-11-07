@@ -1,7 +1,5 @@
-//@ts-nocheck
-
 import React, { PureComponent } from "react";
-import { Props, Ifield, IFormComponent } from "../types";
+import { Props, Ifield } from "../types";
 import regex from "./regex";
 
 import { get as get_ } from "lodash";
@@ -79,13 +77,13 @@ export default class Core extends PureComponent<Props, IState> {
     super(props);
     this.state = {
       fieldsState: {
-        ISFORMVALID: true,
+        ISFORMVALID: true
       },
       validationForm: {},
       usedFields: [],
       oldState: {
-        ISFORMVALID: true,
-      },
+        ISFORMVALID: true
+      }
     };
 
     this.onFieldsChange = this.onFieldsChange.bind(this);
@@ -131,12 +129,18 @@ export default class Core extends PureComponent<Props, IState> {
             let val = currField.value ? currField.value : "";
 
             //if already have state
-            if (val == "" && fieldsState[currField.name]) {
-              val = fieldsState[currField.name];
+            if (typeof currField.name == "string") {
+              if (val == "" && fieldsState[currField.name]) {
+                val = fieldsState[currField.name];
+              }
             }
 
             //set defaultState
-            if (defaultState && defaultStateIsNotEmpty) {
+            if (
+              defaultState &&
+              defaultStateIsNotEmpty &&
+              typeof currField.name == "string"
+            ) {
               //parseState
 
               val = defaultState[currField.name]
@@ -157,8 +161,8 @@ export default class Core extends PureComponent<Props, IState> {
             acc.validations = {
               ...acc.validations,
               [currField.name]: {
-                ...validation,
-              },
+                ...validation
+              }
             };
 
             acc.state = { ...acc.state, [currField.name]: val };
@@ -177,13 +181,13 @@ export default class Core extends PureComponent<Props, IState> {
 
     const newFieldsState = {
       ...newState.state,
-      ISFORMVALID,
+      ISFORMVALID
     };
 
     const state = {
       validationForm: newState.validations,
       fieldsState: newFieldsState,
-      oldState: fieldsState,
+      oldState: fieldsState
     };
 
     if (JSON.stringify(state.oldState) != JSON.stringify(state.fieldsState)) {
@@ -216,6 +220,13 @@ export default class Core extends PureComponent<Props, IState> {
   }
 
   private validateField(field: Ifield<any>, val: any): Tvalidation {
+    if (field.name !== "string") {
+      return {
+        isValid: false,
+        errorMessage: "FIELD_NOT_FOUND"
+      };
+    }
+
     const { fieldsState, validationForm } = this.state;
 
     let ISFORMVALID: boolean = true;
@@ -242,7 +253,7 @@ export default class Core extends PureComponent<Props, IState> {
     if (field.validation?.custom) {
       const result = field.validation.custom({
         ...fieldsState,
-        [field.name]: val,
+        [field.name]: val
       });
 
       if (typeof result == "object") {
@@ -259,7 +270,7 @@ export default class Core extends PureComponent<Props, IState> {
     return {
       ...validationForm[field.name],
       isValid,
-      errorMessage: errorMessage ? errorMessage : "This field is required",
+      errorMessage: errorMessage ? errorMessage : "This field is required"
     };
   }
 
@@ -272,27 +283,27 @@ export default class Core extends PureComponent<Props, IState> {
 
     const newValidation = {
       ...validationForm,
-      [field.name]: validationField,
+      [field.name]: validationField
     };
 
     const ISFORMVALID = this.getISFORMVALID(newValidation);
 
     //use for know if the the field was used
     let newUsedFields = [...usedFields];
-    if (!usedFields.includes(field.name)) {
+    if (typeof field.name == "string" && !usedFields.includes(field.name)) {
       newUsedFields = [...usedFields, field.name];
     }
 
     let newState = {
       ...fieldsState,
       [field.name]: val === "" ? null : val,
-      ISFORMVALID,
+      ISFORMVALID
     };
 
     this.setState({
       fieldsState: newState,
       validationForm: newValidation,
-      usedFields: newUsedFields,
+      usedFields: newUsedFields
     });
 
     if (doOnChange && this.props.onFormChange) {
@@ -309,6 +320,10 @@ export default class Core extends PureComponent<Props, IState> {
 
   getValue(field: Ifield<any>) {
     const { fieldsState, oldState } = this.state;
+
+    if (typeof field.name !== "string") {
+      return "";
+    }
 
     if (field.dataDependsOn) {
       const fieldDepends = field.dataDependsOn.split(".")[0];
@@ -357,7 +372,7 @@ export default class Core extends PureComponent<Props, IState> {
           executeChangeOnBlur,
           defaultState,
           usedFields,
-          field: typeField,
+          field: typeField
         },
         key2
       )
@@ -375,5 +390,5 @@ Core.defaultProps = {
   executeChangeOnBlur: true,
   defaultState: {},
   parseState: () => {},
-  showValidation: false,
+  showValidation: false
 };
