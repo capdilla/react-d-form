@@ -103,7 +103,7 @@ export const WithCustomValidation = () => (
             name: "name",
             type: "Input",
             validation: {
-              custom: (props: any) => {
+              custom: props => {
                 console.log(props);
 
                 return {

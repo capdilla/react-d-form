@@ -265,8 +265,8 @@ export default class Core<T> extends PureComponent<Props<T>, IState<T>> {
     //check custom validation
     if (field.validation?.custom) {
       const result = field.validation.custom({
-        ...fieldsState,
-        data: { [field.name]: val }
+        ...fieldsState.data,
+        [field.name]: val
       });
 
       if (typeof result == "object") {
