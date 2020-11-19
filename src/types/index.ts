@@ -20,8 +20,7 @@ export interface Ifield<T> {
   data?: any[];
   returnOnlyValue?: boolean;
   props?: any;
-  //colSize: 'two' | 'four' | 'six' | 'eight' | 'ten' | 'twelve' | 'fourteen' | 'sixteen',
-  colSize?: number;
+  colSize?: number | string;
   component?: Function;
   validation?: IValidation<T>;
   [key: string]: any;
