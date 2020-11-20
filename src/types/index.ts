@@ -1,4 +1,5 @@
 import React from "react";
+import Regexs from "../lib/regex";
 
 export interface Ifield<T> {
   name: keyof T | string;
@@ -33,7 +34,7 @@ export type TCustomResult = {
 
 export interface IValidation<T> {
   required?: boolean;
-  regexType?: "email" | "phone";
+  regexType?: keyof typeof Regexs;
   errorMessage?: string;
   custom?: (values: T) => boolean | TCustomResult;
 }
