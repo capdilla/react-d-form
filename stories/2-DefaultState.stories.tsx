@@ -12,13 +12,10 @@ export default {
 const TestForm = () => {
   const [formData, setFormData] = useState({});
 
-  console.log(formData, "perrin");
-
   return (
     <DForm
       defaultState={{ name: "Jonh", surname: "Doe", age: 20 }}
       onFormChange={data => {
-        console.log(data, "perro");
         setFormData(data);
       }}
       fields={[
@@ -85,7 +82,10 @@ class Asynccc extends React.Component {
             fields: [
               {
                 name: "age",
-                type: "Input"
+                type: "Input",
+                props: {
+                  type: "number"
+                }
               }
             ]
           }

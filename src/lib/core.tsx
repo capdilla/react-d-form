@@ -227,7 +227,7 @@ export default class Core<T> extends PureComponent<Props<T>, IState<T>> {
       field.props &&
       typeof field.props.type != "undefined" &&
       field.props.type == "number" &&
-      !val
+      val
     ) {
       return +val;
     }
