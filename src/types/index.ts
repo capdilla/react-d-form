@@ -2,7 +2,7 @@ import React from "react";
 import Regexs from "../lib/regex";
 
 export interface Ifield<T> {
-  name: keyof T | string;
+  name: keyof T;
   label?: string;
   placeholder?: string;
   type:
