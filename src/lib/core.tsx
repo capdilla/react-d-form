@@ -103,6 +103,9 @@ export default class Core<T> extends PureComponent<Props<T>, IState<T>> {
     this.fieldFn = this.fieldFn.bind(this);
   }
 
+  // do not delete getSnapshotBeforeUpdate required this
+  componentDidUpdate() {}
+
   getSnapshotBeforeUpdate(prevProps: Props<any>) {
     if (
       (this.props.fields.length > 0 &&
@@ -122,10 +125,7 @@ export default class Core<T> extends PureComponent<Props<T>, IState<T>> {
   }
 
   generateValues(_?: Props<any>) {
-    // let defaultState: TdefaultState, parseState, fields;
-
     const { defaultState, fields } = this.props;
-
     const { fieldsState } = this.state;
 
     const defaultStateIsNotEmpty: boolean =
@@ -394,7 +394,7 @@ export default class Core<T> extends PureComponent<Props<T>, IState<T>> {
   }
 
   render() {
-    return <div></div>;
+    return <></>;
   }
 }
 
