@@ -8,8 +8,8 @@ export default class Form<T> extends Core<T> {
   render() {
     return (
       <div>
-        {this.rows((rows: any) => (
-          <div>
+        {this.rows(rows => (
+          <div key={rows.rowKey}>
             {this.fieldFn(rows, (r: any, key: any) => (
               <Elm key={key} {...r} />
             ))}

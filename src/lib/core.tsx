@@ -30,6 +30,13 @@ interface IState<T> {
   oldState: IfieldState<T>;
 }
 
+interface RowChild<T> {
+  rowKey: number;
+  rowFields: Ifield<T>[];
+}
+
+type RowChildFn<T> = (params: RowChild<T>) => React.ReactElement;
+
 /**
  *  TODO Send only the required props
  * @param FormComponentes
@@ -354,9 +361,8 @@ export default class Core<T> extends PureComponent<Props<T>, IState<T>> {
     }
   }
 
-  rows(rowChild: any) {
+  rows(rowChild: RowChildFn<T>) {
     const { fields } = this.props;
-
     const { fieldsState } = this.state;
 
     return fields.map((field, rowKey) => {
@@ -369,7 +375,7 @@ export default class Core<T> extends PureComponent<Props<T>, IState<T>> {
     });
   }
 
-  fieldFn(rows: { rowFields: Ifield<any>[] }, cb: Function) {
+  fieldFn(rows: { rowFields: Ifield<T>[] }, cb: Function) {
     const { showValidation, executeChangeOnBlur, defaultState } = this.props;
 
     const { validationForm, fieldsState, usedFields } = this.state;
