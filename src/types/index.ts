@@ -22,7 +22,12 @@ export interface Ifield<T> {
   returnOnlyValue?: boolean;
   props?: any;
   colSize?: number | string;
-  component?: Function;
+  component?: (
+    formData: T,
+    defaultState: T,
+    onChange: (data: any) => void,
+    showValidations: boolean
+  ) => React.ReactElement;
   validation?: IValidation<T>;
   [key: string]: any;
 }
@@ -71,7 +76,7 @@ export interface IFormComponent {
   props?: any;
   validation?: any;
   showValidation?: boolean;
-  usedFields?: any;
+  usedFields?: string[];
   iconName?: string;
   iconSize?: number;
   iconColor?: string;
