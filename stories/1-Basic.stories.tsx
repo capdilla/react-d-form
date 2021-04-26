@@ -119,6 +119,25 @@ export const WithCustomValidation = () => (
   />
 );
 
+export const WithCustomComponent = () => (
+  <DForm
+    defaultState={{
+      name: "john"
+    }}
+    fields={[
+      {
+        fields: [
+          {
+            name: "name",
+            type: "",
+            component: (state, defaultState) => <>hello {defaultState.name}</>
+          }
+        ]
+      }
+    ]}
+  />
+);
+
 // export const Text = () => <Button onClick={action('clicked')}>Hello Button</Button>;
 
 // export const Emoji = () => (

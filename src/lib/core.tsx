@@ -43,7 +43,9 @@ type RowChildFn<T> = (params: RowChild<T>) => React.ReactElement;
  * @param props
  */
 export const GetComponent = (FormComponentes: any, props: any) => {
-  if (props.component == null) {
+  console.log(props, "perririririn");
+
+  if (props.field.component == null) {
     const Elm = FormComponentes[props.field.type];
 
     if (
@@ -70,12 +72,17 @@ export const GetComponent = (FormComponentes: any, props: any) => {
     );
   } else {
     //the output state, the state of the form , onChange
-    const Elm = props.component(
+    const Elm = props.field.component(
       props.fieldsState,
       props.defaultState,
       (data: any) => props.onFieldsChange(props.field, data, true),
       props.showValidation
     );
+
+    console.log("perrorororo");
+
+    console.log(Elm);
+
     return Elm;
   }
 };
