@@ -25,7 +25,7 @@ export interface Ifield<T> {
   component?: (
     formData: T,
     defaultState: T,
-    onChange: (data: any) => void,
+    onChange: (data: any, field?: keyof T) => void,
     showValidations: boolean
   ) => React.ReactElement;
   validation?: IValidation<T>;

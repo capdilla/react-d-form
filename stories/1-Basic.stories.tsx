@@ -122,7 +122,8 @@ export const WithCustomValidation = () => (
 export const WithCustomComponent = () => (
   <DForm
     defaultState={{
-      name: "john"
+      name: "john",
+      surname: ""
     }}
     fields={[
       {
@@ -130,7 +131,25 @@ export const WithCustomComponent = () => (
           {
             name: "name",
             type: "",
-            component: (state, defaultState) => <>hello {defaultState.name}</>
+            component: (state, defaultState, onChange) => (
+              <>
+                hello {state.name}
+                <button onClick={() => onChange(new Date().getTime(), "name")}>
+                  change value
+                </button>
+              </>
+            )
+          },
+          {
+            name: "surname",
+            type: "",
+            component: (state, defaultState, onChange) => (
+              <>
+                {console.log(state, "perror")}
+                hello {state.surname}
+                <button onClick={() => onChange("Doe")}>change value</button>
+              </>
+            )
           }
         ]
       }
