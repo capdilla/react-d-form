@@ -72,7 +72,7 @@ export const GetComponent = (FormComponentes: any, props: any) => {
     //the output state, the state of the form , onChange
     const Elm = props.field.component(
       props.fieldsState.data,
-      props.defaultState.data,
+      props.defaultState,
       (data: any, field?: string) =>
         props.onFieldsChange(field ? { name: field } : props.field, data, true),
       props.showValidation
