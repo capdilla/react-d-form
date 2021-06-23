@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import { IFields, IFormData } from "../src/types";
+import React, { useRef, useState } from 'react'
+import { IFields, IFormData } from '../src/types'
 
-import DForm from "../src/react-web";
+import DForm from '../src/react-web'
 
 export default {
-  title: "Basic"
+  title: 'Basic',
   // component: Button,
-};
+}
 
 export const Basic = () => (
   <DForm
@@ -14,24 +14,24 @@ export const Basic = () => (
       {
         fields: [
           {
-            name: "name",
-            placeholder: "Name",
-            type: "Input",
+            name: 'name',
+            placeholder: 'Name',
+            type: 'Input',
             props: {
-              onKeyPress: e => {
+              onKeyPress: (e) => {
                 if (e.which == 32) {
-                  e.preventDefault();
-                  console.log("Space Detected");
-                  return false;
+                  e.preventDefault()
+                  console.log('Space Detected')
+                  return false
                 }
-              }
-            }
-          }
-        ]
-      }
+              },
+            },
+          },
+        ],
+      },
     ]}
   />
-);
+)
 
 export const WithValidation = () => (
   <DForm
@@ -39,18 +39,18 @@ export const WithValidation = () => (
       {
         fields: [
           {
-            name: "name",
-            type: "Input",
+            name: 'name',
+            type: 'Input',
             validation: {
               required: true,
-              errorMessage: "This if is empty "
-            }
-          }
-        ]
-      }
+              errorMessage: 'This if is empty ',
+            },
+          },
+        ],
+      },
     ]}
   />
-);
+)
 
 export const WithRegexEmail = () => (
   <DForm
@@ -58,41 +58,41 @@ export const WithRegexEmail = () => (
       {
         fields: [
           {
-            name: "name",
-            type: "Input",
+            name: 'name',
+            type: 'Input',
             validation: {
-              regexType: "email",
-              errorMessage: "No es un mail"
-            }
-          }
-        ]
-      }
+              regexType: 'email',
+              errorMessage: 'No es un mail',
+            },
+          },
+        ],
+      },
     ]}
   />
-);
+)
 
 interface FormType {
-  name: string;
+  name: string
 }
 
 const fields: IFields<FormType>[] = [
   {
     fields: [
       {
-        name: "name",
-        type: "Input",
+        name: 'name',
+        type: 'Input',
         validation: {
-          regexType: "email",
-          errorMessage: "No es un mail"
-        }
-      }
-    ]
-  }
-];
+          regexType: 'email',
+          errorMessage: 'No es un mail',
+        },
+      },
+    ],
+  },
+]
 
 export const WithTypescript = () => (
-  <DForm fields={fields} onFormChange={val => console.log(val)} />
-);
+  <DForm fields={fields} onFormChange={(val) => console.log(val)} />
+)
 
 export const WithCustomValidation = () => (
   <DForm
@@ -100,91 +100,167 @@ export const WithCustomValidation = () => (
       {
         fields: [
           {
-            name: "name",
-            type: "Input",
+            name: 'name',
+            type: 'Input',
             validation: {
-              custom: props => {
-                console.log(props);
+              custom: (props) => {
+                console.log(props)
 
                 return {
-                  valid: props.name == "hello",
-                  errorMessage: "is not hello"
-                };
-              }
-            }
-          }
-        ]
-      }
+                  valid: props.name == 'hello',
+                  errorMessage: 'is not hello',
+                }
+              },
+            },
+          },
+        ],
+      },
     ]}
   />
-);
+)
 
 interface WithCustomComponentState {
-  name: string;
-  surname: string;
-  age: number;
+  name: string
+  surname: string
+  age: number
 }
 export const WithCustomComponent = () => {
   const [state, setState] = useState<IFormData<WithCustomComponentState>>({
-    data: { age: 0, name: "John", surname: "" },
+    data: { age: 0, name: 'John', surname: '' },
     validation: {
-      ISFORMVALID: true
-    }
-  });
+      ISFORMVALID: true,
+    },
+  })
 
   return (
     <>
       <h1> the age is {state.data.age}</h1>
       <DForm
         defaultState={state.data}
-        onFormChange={s => setState(s)}
+        onFormChange={(s) => setState(s)}
         fields={[
           {
             fields: [
               {
-                name: "name",
-                type: "",
+                name: 'name',
+                type: '',
                 component: (state, defaultState, onChange) => (
                   <>
                     hello {state.name}
                     <button
-                      onClick={() => onChange(new Date().getTime(), "name")}
+                      onClick={() => onChange(new Date().getTime(), 'name')}
                     >
                       change value
                     </button>
                     <button
-                      onClick={() => onChange(defaultState.age + 1, "age")}
+                      onClick={() => onChange(defaultState.age + 1, 'age')}
                     >
                       change age {defaultState.age}
                     </button>
                   </>
-                )
+                ),
               },
               {
-                name: "surname",
-                type: "",
+                name: 'surname',
+                type: '',
                 component: (state, defaultState, onChange) => (
                   <>
                     hello {state.surname}
-                    <button onClick={() => onChange("Doe")}>
+                    <button onClick={() => onChange('Doe')}>
                       change value
                     </button>
                   </>
-                )
+                ),
               },
               {
                 // if you need to change this value from anther field you have to declare this field
-                name: "age",
-                type: "",
-                component: () => null
-              }
-            ]
-          }
+                name: 'age',
+                type: '',
+                component: () => null,
+              },
+            ],
+          },
         ]}
       />
     </>
-  );
-};
+  )
+}
+
+interface WithRef {
+  name: string
+  surname: string
+  age: number
+}
+export const WithRef = () => {
+  const formRef = useRef<DForm<WithRef> | null>(null)
+  const [state, setState] = useState<IFormData<WithRef>>({
+    data: { age: 0, name: 'John', surname: '' },
+    validation: {
+      ISFORMVALID: true,
+    },
+  })
+
+  const onClick = () => {
+    if (formRef.current) {
+      console.log(formRef.current.state.validationForm.age.isValid)
+    }
+  }
+
+  return (
+    <>
+      <h1> the age is {state.data.age}</h1>
+      <button onClick={onClick}>Click</button>
+      <DForm
+        ref={formRef}
+        defaultState={state.data}
+        onFormChange={(s) => setState(s)}
+        fields={[
+          {
+            fields: [
+              {
+                name: 'name',
+                type: '',
+                component: (state, defaultState, onChange) => (
+                  <>
+                    hello {state.name}
+                    <button
+                      onClick={() => onChange(new Date().getTime(), 'name')}
+                    >
+                      change value
+                    </button>
+                    <button
+                      onClick={() => onChange(defaultState.age + 1, 'age')}
+                    >
+                      change age {defaultState.age}
+                    </button>
+                  </>
+                ),
+              },
+              {
+                name: 'surname',
+                type: '',
+                component: (state, defaultState, onChange) => (
+                  <>
+                    hello {state.surname}
+                    <button onClick={() => onChange('Doe')}>
+                      change value
+                    </button>
+                  </>
+                ),
+              },
+              {
+                // if you need to change this value from anther field you have to declare this field
+                name: 'age',
+                type: '',
+                component: () => null,
+              },
+            ],
+          },
+        ]}
+      />
+    </>
+  )
+}
 
 // export const Text = () => <Button onClick={action('clicked')}>Hello Button</Button>;
 
