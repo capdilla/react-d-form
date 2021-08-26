@@ -164,13 +164,7 @@ export default class Core<T> extends PureComponent<Props<T>, IState<T>> {
               typeof currField.name == 'string' &&
               hasKey(defaultState, currField.name)
             ) {
-              //parseState
-
               val = defaultState[currField.name]
-                ? defaultState[currField.name]
-                : currField.type === 'Checkbox'
-                ? false
-                : null
             }
 
             val = this.parseValue(currField, val)
@@ -200,7 +194,9 @@ export default class Core<T> extends PureComponent<Props<T>, IState<T>> {
       { validations: {} as IValidation<T>, state: {} as T },
     )
 
-    const ISFORMVALID = this.getISFORMVALID(newState.validations as IValidation<T>)
+    const ISFORMVALID = this.getISFORMVALID(
+      newState.validations as IValidation<T>,
+    )
 
     const newFieldsState: IfieldState<T> = {
       data: { ...newState.state },
@@ -228,11 +224,25 @@ export default class Core<T> extends PureComponent<Props<T>, IState<T>> {
     )
   }
 
-  private parseValue<T>(field: Ifield<any>, val: any): number | T {
+  private parseValue(field: Ifield<any>, val: any): any {
+    if (field.type === 'Checkbox' && !val) {
+      return false
+    }
+
+    // if is number and is falsy
+    if (
+      field.props &&
+      typeof field.props.type != undefined &&
+      field.props.type == 'number' &&
+      !val
+    ) {
+      return 0
+    }
+
     //parse val tu number
     if (
       field.props &&
-      typeof field.props.type != 'undefined' &&
+      typeof field.props.type != undefined &&
       field.props.type == 'number' &&
       val
     ) {

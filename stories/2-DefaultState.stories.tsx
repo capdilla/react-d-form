@@ -1,101 +1,110 @@
-import React, { useState, useEffect } from "react";
-import { action } from "@storybook/addon-actions";
-import { Button } from "@storybook/react/demo";
+import React, { useState, useEffect } from 'react'
+import { action } from '@storybook/addon-actions'
+import { Button } from '@storybook/react/demo'
 
-import DForm from "../src/react-web";
+import DForm from '../src/react-web'
 
 export default {
-  title: "Default State"
+  title: 'Default State',
   // component: Button,
-};
+}
 
 const TestForm = () => {
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({})
 
   return (
     <DForm
-      defaultState={{ name: "Jonh", surname: "Doe", age: 20 }}
-      onFormChange={data => {
-        setFormData(data);
+      defaultState={{ name: 'Jonh', surname: 'Doe', age: 20 }}
+      onFormChange={(data) => {
+        setFormData(data)
       }}
       fields={[
         {
           fields: [
             {
-              name: "name",
-              type: "Input"
+              name: 'name',
+              type: 'Input',
             },
             {
-              name: "surname",
-              type: "Input"
-            }
-          ]
+              name: 'surname',
+              type: 'Input',
+            },
+          ],
         },
         {
           fields: [
             {
-              name: "age",
-              type: "Input"
-            }
-          ]
-        }
+              name: 'age',
+              type: 'Input',
+            },
+          ],
+        },
       ]}
     />
-  );
-};
+  )
+}
 
-export const DefaultState = () => <TestForm />;
+export const DefaultState = () => <TestForm />
 
 class Asynccc extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
-      formData: null
-    };
+      formData: null,
+    }
   }
 
   componentDidMount() {
     setTimeout(() => {
-      this.setState({ formData: { name: "Jonh", surname: "Doe", age: 20 } });
-    }, 2000);
+      this.setState({
+        formData: { name: 'Jonh', surname: 'Doe', age: 20, age2: 0 },
+      })
+    }, 2000)
   }
 
   render() {
     return (
       <DForm
         defaultState={this.state.formData ? this.state.formData : null}
-        onFormChange={data => this.setState({ formData: data })}
+        onFormChange={(data) => this.setState({ formData: data })}
         fields={[
           {
             fields: [
               {
-                name: "name",
-                type: "Input"
+                name: 'name',
+                type: 'Input',
               },
               {
-                name: "surname",
-                type: "Input"
-              }
-            ]
+                name: 'surname',
+                type: 'Input',
+              },
+            ],
           },
           {
             fields: [
               {
-                name: "age",
-                type: "Input",
+                name: 'age',
+                type: 'Input',
                 props: {
-                  type: "number"
-                }
-              }
-            ]
-          }
+                  type: 'number',
+                },
+              },
+              {
+                name: 'age2',
+                type: 'Input',
+                props: {
+                  type: 'number',
+                },
+              },
+            ],
+          },
         ]}
       />
-    );
+    )
   }
 }
 
-export const DefaultStateAsync = () => <Asynccc />;
+export const DefaultStateAsync = () => <Asynccc />
 // export const DefaultStateAsync = () => {
 //   const [stop, setStop] = useState(false);
 //   const [formData, setFormData] = useState({});
