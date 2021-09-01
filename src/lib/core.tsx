@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { Props, Ifield } from '../types'
+import { Props, Field } from '../types'
 import regex from './regex'
 
 import { get as get_ } from 'lodash'
@@ -20,7 +20,7 @@ export interface IfieldState<T> {
 }
 
 export interface IFieldsStateValidation {
-  ISFORMVALID: boolean
+  isFormValid: boolean
 }
 
 export interface IState<T> {
@@ -32,7 +32,7 @@ export interface IState<T> {
 
 export interface RowChild<T> {
   rowKey: number
-  rowFields: Ifield<T>[]
+  rowFields: Field<T>[]
 }
 
 type RowChildFn<T> = (params: RowChild<T>) => React.ReactElement
@@ -92,7 +92,7 @@ export default class Core<T> extends PureComponent<Props<T>, IState<T>> {
       fieldsState: {
         data: {} as T,
         validation: {
-          ISFORMVALID: true,
+          isFormValid: true,
         },
       },
       validationForm: {} as IValidation<T>,
@@ -100,7 +100,7 @@ export default class Core<T> extends PureComponent<Props<T>, IState<T>> {
       oldState: {
         data: {} as T,
         validation: {
-          ISFORMVALID: true,
+          isFormValid: true,
         },
       },
     }
@@ -194,13 +194,13 @@ export default class Core<T> extends PureComponent<Props<T>, IState<T>> {
       { validations: {} as IValidation<T>, state: {} as T },
     )
 
-    const ISFORMVALID = this.getISFORMVALID(
+    const isFormValid = this.getISFORMVALID(
       newState.validations as IValidation<T>,
     )
 
     const newFieldsState: IfieldState<T> = {
       data: { ...newState.state },
-      validation: { ISFORMVALID },
+      validation: { isFormValid },
     }
 
     const state = {
@@ -224,7 +224,7 @@ export default class Core<T> extends PureComponent<Props<T>, IState<T>> {
     )
   }
 
-  private parseValue(field: Ifield<any>, val: any): any {
+  private parseValue(field: Field<any>, val: any): any {
     if (field.type === 'Checkbox' && !val) {
       return false
     }
@@ -252,7 +252,7 @@ export default class Core<T> extends PureComponent<Props<T>, IState<T>> {
     return val
   }
 
-  private validateField(field: Ifield<any>, val: any): Tvalidation {
+  private validateField(field: Field<any>, val: any): Tvalidation {
     if (typeof field.name !== 'string') {
       return {
         isValid: false,
@@ -303,7 +303,7 @@ export default class Core<T> extends PureComponent<Props<T>, IState<T>> {
     }
   }
 
-  onFieldsChange(field: Ifield<any>, val: any, doOnChange: boolean) {
+  onFieldsChange(field: Field<any>, val: any, doOnChange: boolean) {
     const { validationForm, usedFields, fieldsState } = this.state
 
     const value = this.parseValue(field, val)
@@ -315,7 +315,7 @@ export default class Core<T> extends PureComponent<Props<T>, IState<T>> {
       [field.name]: validationField,
     }
 
-    const ISFORMVALID = this.getISFORMVALID(newValidation)
+    const isFormValid = this.getISFORMVALID(newValidation)
 
     //use for know if the the field was used
     let newUsedFields = [...usedFields]
@@ -328,7 +328,7 @@ export default class Core<T> extends PureComponent<Props<T>, IState<T>> {
         ...fieldsState.data,
         [field.name]: val === '' ? null : val,
       },
-      validation: { ISFORMVALID },
+      validation: { isFormValid },
     }
 
     this.setState({
@@ -342,14 +342,14 @@ export default class Core<T> extends PureComponent<Props<T>, IState<T>> {
     }
   }
 
-  getDataDependsOn(field: Ifield<any>) {
+  getDataDependsOn(field: Field<any>) {
     if (field.dataDependsOn) {
       const data = get_(this.state.fieldsState, field.dataDependsOn)
       return data ? data : []
     }
   }
 
-  getValue(field: Ifield<any>) {
+  getValue(field: Field<any>) {
     const { fieldsState, oldState } = this.state
 
     if (typeof field.name !== 'string') {
@@ -385,7 +385,7 @@ export default class Core<T> extends PureComponent<Props<T>, IState<T>> {
     })
   }
 
-  fieldFn(rows: { rowFields: Ifield<T>[] }, cb: Function) {
+  fieldFn(rows: { rowFields: Field<T>[] }, cb: Function) {
     const { showValidation, executeChangeOnBlur, defaultState } = this.props
 
     const { validationForm, fieldsState, usedFields } = this.state

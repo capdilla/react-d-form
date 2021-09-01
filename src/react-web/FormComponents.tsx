@@ -1,9 +1,8 @@
-import React from "react";
-import { withError } from "../helpers/getError";
-import { IFormComponent } from "../types";
+import React from 'react'
+import { FormComponent, withError } from '../index'
 
-interface Iinput extends IFormComponent {
-  onBlur: (value: any) => any;
+interface Iinput extends FormComponent {
+  onBlur: (value: any) => any
 }
 
 const Components = {
@@ -32,11 +31,11 @@ const Components = {
             {...props}
           />
 
-          {error && <label style={{ color: "red" }}>{error.content}</label>}
+          {error && <label style={{ color: 'red' }}>{error.content}</label>}
         </>
-      );
-    }
+      )
+    },
   ),
-};
+}
 
-export default Components;
+export default Components

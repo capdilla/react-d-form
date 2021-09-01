@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react'
-import { IFields, IFormData } from '../src/types'
+import { Fields, FormData } from '../src'
 
 import DForm from '../src/react-web'
 
@@ -75,7 +75,7 @@ interface FormType {
   name: string
 }
 
-const fields: IFields<FormType>[] = [
+const fields: Fields<FormType>[] = [
   {
     fields: [
       {
@@ -125,10 +125,10 @@ interface WithCustomComponentState {
   age: number
 }
 export const WithCustomComponent = () => {
-  const [state, setState] = useState<IFormData<WithCustomComponentState>>({
+  const [state, setState] = useState<FormData<WithCustomComponentState>>({
     data: { age: 0, name: 'John', surname: '' },
     validation: {
-      ISFORMVALID: true,
+      isFormValid: true,
     },
   })
 
@@ -193,10 +193,10 @@ interface WithRef {
 }
 export const WithRef = () => {
   const formRef = useRef<DForm<WithRef> | null>(null)
-  const [state, setState] = useState<IFormData<WithRef>>({
+  const [state, setState] = useState<FormData<WithRef>>({
     data: { age: 0, name: 'John', surname: '' },
     validation: {
-      ISFORMVALID: true,
+      isFormValid: true,
     },
   })
 
