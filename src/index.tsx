@@ -1,9 +1,8 @@
-import Core, { GetComponent } from "./lib/core";
-import ReactDForm from "./react-web";
-import { withError } from "./helpers/getError";
-import { IFormComponent, IFormData, IFields } from "./types";
-export type FormComponent = IFormComponent;
+import Core, { GetComponent } from './lib/core'
+import ReactDForm from './react-web'
+export * from './helpers/getError'
+export * from './types'
 
-export default Core;
+export default Core
 
-export { GetComponent, ReactDForm, withError, IFormData, IFields };
+export { GetComponent, ReactDForm }

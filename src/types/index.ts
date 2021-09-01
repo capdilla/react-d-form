@@ -1,7 +1,7 @@
 import React from "react";
 import Regexs from "../lib/regex";
 
-export interface Ifield<T> {
+export interface Field<T> {
   name: keyof T;
   label?: string;
   placeholder?: string;
@@ -28,45 +28,45 @@ export interface Ifield<T> {
     onChange: (data: any, field?: keyof T) => void,
     showValidations: boolean
   ) => React.ReactElement;
-  validation?: IValidation<T>;
+  validation?: Validation<T>;
   [key: string]: any;
 }
 
-export type TCustomResult = {
+export type CustomResult = {
   valid: boolean;
   errorMessage: string;
 };
 
-export interface IValidation<T> {
+export interface Validation<T> {
   required?: boolean;
   regexType?: keyof typeof Regexs;
   errorMessage?: string;
-  custom?: (values: T) => boolean | TCustomResult;
+  custom?: (values: T) => boolean | CustomResult;
 }
 
-export interface IFields<T> {
+export interface Fields<T> {
   div?: string;
-  fields: ((values: T) => Ifield<T>[]) | Ifield<T>[];
+  fields: ((values: T) => Field<T>[]) | Field<T>[];
 }
 
-export type TdefaultState = {
+export type DefaultState = {
   [key: string]: any;
 };
 
-export interface IFormData<T> {
+export interface FormData<T> {
   data: T;
-  validation: { ISFORMVALID: boolean };
+  validation: { isFormValid: boolean };
 }
 export interface Props<T> {
-  fields: IFields<T>[];
-  onFormChange?: (formData: IFormData<T>) => void;
+  fields: Fields<T>[];
+  onFormChange?: (formData: FormData<T>) => void;
   showValidation?: boolean;
   defaultState?: T;
   parseState?: Function;
   executeChangeOnBlur?: boolean;
 }
 
-export interface IFormComponent {
+export interface FormComponent {
   label?: string;
   value?: any;
   onChange: (value: any) => any;
