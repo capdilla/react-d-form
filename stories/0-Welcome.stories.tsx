@@ -1,15 +1,14 @@
-import React from "react";
-import { linkTo } from "@storybook/addon-links";
-import { Welcome } from "@storybook/react/demo";
-import DForm from "../src/react-web";
+import React from 'react'
+import { linkTo } from '@storybook/addon-links'
+import { Welcome } from '@storybook/react/demo'
 
 export default {
-  title: "Welcome",
-  component: Welcome
-};
+  title: 'Welcome',
+  component: Welcome,
+}
 
-export const ToStorybook = () => <DForm />;
+export const ToStorybook = () => "Hello D-Form"
 
 ToStorybook.story = {
-  name: "D Form"
-};
+  name: 'D Form',
+}
