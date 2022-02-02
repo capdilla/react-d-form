@@ -18,10 +18,7 @@ export interface Field<T> {
     | 'Divider'
     | any
   value?: any
-  data?: any[]
-  returnOnlyValue?: boolean
   props?: any
-  colSize?: number | string
   component?: (
     formData: T,
     defaultState: T,
@@ -71,15 +68,11 @@ export interface FormComponent {
   value?: any
   onChange: (value: any) => any
   name: string
-  colSize?: number
   placeholder?: string
   props?: any
   validation?: any
   showValidation?: boolean
   usedFields?: string[]
-  iconName?: string
-  iconSize?: number
-  iconColor?: string
   error?: { content: string }
   validationForm: any
 }
