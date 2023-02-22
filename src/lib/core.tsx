@@ -8,7 +8,7 @@ import { debounce } from '../helpers/debounce'
 
 export type Tvalidation = {
   isValid: boolean
-  errorMessage: staring
+  errorMessage: string
 }
 
 export type IValidation<T extends Record<string, any>> = {
