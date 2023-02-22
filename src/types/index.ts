@@ -61,6 +61,8 @@ export interface Props<T> {
   defaultState?: T
   parseState?: Function
   executeChangeOnBlur?: boolean
+  executeDebounceChange?: boolean
+  delayToDebounceChange?: number
 }
 
 export interface FormComponent {

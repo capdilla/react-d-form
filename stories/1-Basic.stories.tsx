@@ -262,6 +262,33 @@ export const WithRef = () => {
   )
 }
 
+export const WithDebounceChange = () => (
+  <DForm
+    executeChangeOnBlur={false}
+    executeDebounceChange
+    onFormChange={() => console.log("executeDebounceChange")}
+    fields={[
+      {
+        fields: [
+          {
+            name: "name",
+            placeholder: "Name",
+            type: "Input",
+            props: {
+              onKeyPress: (e) => {
+                if (e.which == 32) {
+                  e.preventDefault();
+                  console.log("Space Detected");
+                  return false;
+                }
+              },
+            },
+          },
+        ],
+      },
+    ]}
+  />
+)
 // export const Text = () => <Button onClick={action('clicked')}>Hello Button</Button>;
 
 // export const Emoji = () => (

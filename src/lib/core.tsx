@@ -4,6 +4,7 @@ import regex from './regex'
 
 import { get as get_ } from 'lodash'
 import { hasKey } from '../helpers/hasKey'
+import { debounce } from '../helpers/debounce'
 
 export type Tvalidation = {
   isValid: boolean
@@ -303,6 +304,12 @@ export default class Core<T> extends PureComponent<Props<T>, IState<T>> {
     }
   }
 
+  private debouncedFormChange = debounce(newState => {
+    if (!this.props.onFormChange) return;
+    
+    this.props.onFormChange(newState)
+  },this.props.delayToDebounceChange ?? 500)
+
   onFieldsChange(field: Field<any>, val: any, doOnChange: boolean) {
     const { validationForm, usedFields, fieldsState } = this.state
 
@@ -338,6 +345,10 @@ export default class Core<T> extends PureComponent<Props<T>, IState<T>> {
     })
 
     if (doOnChange && this.props.onFormChange) {
+      if (!this.props.executeChangeOnBlur && this.props.executeDebounceChange) {
+        this.debouncedFormChange(newState)
+        return;
+      }
       this.props.onFormChange(newState)
     }
   }
@@ -418,6 +429,8 @@ Core.defaultProps = {
   fields: [],
   onFormChange: () => {},
   executeChangeOnBlur: true,
+  executeDebounceChange: false,
+  delayToDebounceChange: 500,
   defaultState: {},
   parseState: () => {},
   showValidation: false,
