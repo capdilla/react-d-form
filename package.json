@@ -16,7 +16,7 @@
   "author": "Carlos Padilla",
   "license": "MIT",
   "dependencies": {
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
   },
@@ -29,7 +29,7 @@
     "@storybook/react": "^5.3.17",
     "@storybook/react-native": "^5.3.18",
     "@types/jest": "^25.1.4",
-    "@types/lodash": "^4.14.149",
+    "@types/lodash": "^4.17.20",
     "babel-loader": "^8.1.0",
     "babel-preset-react-app": "^9.1.2",
     "husky": "^4.2.5",
